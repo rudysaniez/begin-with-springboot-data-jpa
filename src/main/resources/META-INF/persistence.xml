@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+	<persistence-unit name="siePersistenceUnitName" transaction-type="RESOURCE_LOCAL">
+		<class>com.me.work.jpa.bo.Character</class>
+		<class>com.me.work.jpa.bo.Role</class>
+		<class>com.me.work.jpa.bo.Life</class>
+		<class>com.me.work.jpa.bo.Spell</class>
+		<class>com.me.work.jpa.bo.Key</class>
+		
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<properties>
+			<property name="hibernate.cache.use_query_cache" value="true"/>
+			<property name="hibernate.cache.use_second_level_cache" value="true"/>
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.EhCacheRegionFactory"/>
+			<property name="net.sf.ehcache.configurationResourceName" value="META-INF/ehcache.xml"/>
+			
+			<property name="hibernate.generate_statistics" value="true"/>
+			<property name="hibernate.jdbc.wrap_result_sets" value="true"/>
+			<property name="hibernate.jdbc.batch_size" value="20"/>
+			<property name="hibernate.default_batch_fetch_size" value="4"/>
+		</properties>
+	</persistence-unit>
+	
+</persistence>
