@@ -12,10 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,13 +40,12 @@ public class Character implements Serializable {
 	private Date creationDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_ROLE_ID")
-	private Role role;
+	@OneToMany(mappedBy="character",fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Role> roles;
 
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToOne(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private Life life;
+	@OneToMany(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Life> lifes;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -57,10 +53,35 @@ public class Character implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * @return list of {@link Role}
+	 */
+	public List<Role> getRoles() {
+		
+		if(this.roles == null)
+			this.roles = new ArrayList<>();
+		
+		return this.roles;
+	}
+	
+	/**
+	 * @return list of {@link Life}
+	 */
+	public List<Life> getLifes() {
+		
+		if(this.lifes == null)
+			this.lifes = new ArrayList<>();
+		
+		return this.lifes;
+	}
+	
+	/**
+	 * @return list of {@link Spell}
+	 */
 	public List<Spell> getSpells() {
 		
 		if(this.spells == null)
-			this.spells = new ArrayList<Spell>();
+			this.spells = new ArrayList<>();
 		
 		return this.spells;
 	}

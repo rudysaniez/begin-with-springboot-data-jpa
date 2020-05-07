@@ -1,5 +1,8 @@
 package com.me.work.api.jpa.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode.Exclude;
 
 @Data
 @Table(name="SPELL")
@@ -29,30 +32,61 @@ public class Spell {
 	@Column(name="NAME")
 	private String name;
 	
-	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="TYPE")
 	private String controlType;
 	
-	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="BASIC_DAMAGE")
 	private int basicDamage;
 	
-	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="UP_BY_LEVEL_PCT")
 	private int upByLevelPct;
 	
-	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="ITERATION_NUMBER")
 	private int iterationNumber = 1;
 	
+	@lombok.EqualsAndHashCode.Exclude
+	@Column(name="EFFECT_AREA")
+	private String effectArea;
+	
+	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_CHARACTER_ID")
 	private Character character;
 	
-	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_KEY_ID")
-	private Key key;
+	@lombok.EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Key> keys;
+	
+	@lombok.EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Range> ranges;
+	
+	/**
+	 * @return list of {@link Key}
+	 */
+	public List<Key> getKeys() {
+		
+		if(this.keys == null)
+			this.keys = new ArrayList<>();
+		
+		return this.keys;
+	}
+	
+	/**
+	 * @return list of {@link Range}
+	 */ 
+	public List<Range> getRanges() {
+		
+		if(this.ranges == null)
+			this.ranges = new ArrayList<>();
+		
+		return this.ranges;
+	}
 	
 	public static enum ControlTypeEnum {
 		
@@ -68,6 +102,20 @@ public class Spell {
 		public String toString() {
 			return this.name();
 		}
+	}
+	
+	public static enum EffectAreaEnum {
+		
+		CIRCLE,
+		SEMI_CIRCLE,
+		LINE,
+		HAND_TO_HAND;
+		
+		@Override
+		public String toString() {
+			return this.name();
+		}
+		
 	}
 	
 	public static enum SpellNameEnum {

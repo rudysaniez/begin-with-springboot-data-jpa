@@ -1,7 +1,5 @@
 package com.me.work.api.jpa.bo;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +7,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,8 +34,9 @@ public class Key {
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude
-	@OneToMany(mappedBy="key", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Spell> spells;
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_SPELL_ID")
+	private Spell spell;
 	
 	public static enum KeyEnum {
 		

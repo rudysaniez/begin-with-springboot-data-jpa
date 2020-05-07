@@ -5,7 +5,6 @@ import java.time.OffsetDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode.Exclude;
 
 @Data
 public class Role {
@@ -16,7 +15,7 @@ public class Role {
 	@JsonProperty(value="name", required=true)
 	private String name;
 
-	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	@JsonProperty(value="creationDate", required=true)
 	private OffsetDateTime creationDate;
 }

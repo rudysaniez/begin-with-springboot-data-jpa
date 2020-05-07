@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import com.me.work.api.jpa.bo.Character;
 import com.me.work.api.jpa.bo.Key;
 import com.me.work.api.jpa.bo.Life;
+import com.me.work.api.jpa.bo.Range;
 import com.me.work.api.jpa.bo.Role;
 import com.me.work.api.jpa.bo.Spell;
 import com.me.work.api.jpa.bo.services.CacheCharacterNameService;
@@ -23,6 +24,8 @@ import com.me.work.api.jpa.bo.services.CacheRoleService;
 import com.me.work.api.jpa.bo.services.CacheSpellNameService;
 import com.me.work.api.jpa.mapper.CharacterMapper;
 import com.me.work.api.jpa.mapper.CharacterMapperImpl;
+import com.me.work.api.jpa.mapper.SpellMapper;
+import com.me.work.api.jpa.mapper.SpellMapperImpl;
 import com.me.work.api.jpa.repository.CharacterRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +65,11 @@ public class Application implements ApplicationRunner {
 		return new CharacterMapperImpl();
 	}
 	
+	@Bean
+	public SpellMapper spellMapper() {
+		return new SpellMapperImpl();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -78,16 +86,20 @@ public class Application implements ApplicationRunner {
 		character.setName(Character.CharacterNameEnum.JAINA.name());
 		character.setName(this.cacheCharacterNameService.getValue(Character.CharacterNameEnum.JAINA.name()));
 		
+		//Life
 		Life life = new Life();
 		life.setMinimumLife(1400);
 		life.setUpByLevelInPct(4);
-		character.setLife(life);
+		life.setCharacter(character);
+		character.getLifes().add(life);
 		
 		Role role = new Role();
 		role.setCreationDate(new Date());
 		role.setName(this.cacheRoleService.getValue(Role.RoleNameEnum.REMOTE_ASSASSIN.name()));
-		character.setRole(role);
+		role.setCharacter(character);
+		character.getRoles().add(role);
 		
+		//Spell A
 		Key keyA = new Key();
 		keyA.setName(this.cacheKeyService.getValue(Key.KeyEnum.A.name()));
 		
@@ -96,24 +108,44 @@ public class Application implements ApplicationRunner {
 		spellA.setUpByLevelPct(5);
 		spellA.setCharacter(character);
 		spellA.setControlType(this.cacheControlService.getValue(Spell.ControlTypeEnum.SLOWDOWN.name()));
-		spellA.setKey(keyA);
+		spellA.getKeys().add(keyA);
 		spellA.setName(this.cacheSpellNameService.getValue(Spell.SpellNameEnum.FLASH_OF_FROST.name()));
+		spellA.setEffectArea(Spell.EffectAreaEnum.LINE.name()); //FIXME must be in the cache
+		
+		keyA.setSpell(spellA);
+		
+		Range rangeSpellA = new Range();
+		rangeSpellA.setCreateDate(new Date());
+		rangeSpellA.setShootingRange(7d);
+		rangeSpellA.setSpell(spellA);
+		spellA.getRanges().add(rangeSpellA);
 		
 		character.getSpells().add(spellA);
-		
+
+		//Spell Z
 		Key keyZ = new Key();
 		keyZ.setName(this.cacheKeyService.getValue(Key.KeyEnum.Z.name()));
 		
-		Spell spellB = new Spell();
-		spellB.setBasicDamage(250);
-		spellB.setUpByLevelPct(15);
-		spellB.setIterationNumber(3);
-		spellB.setCharacter(character);
-		spellB.setControlType(this.cacheControlService.getValue(Spell.ControlTypeEnum.SLOWDOWN.name()));
-		spellB.setKey(keyZ);
-		spellB.setName(this.cacheSpellNameService.getValue(Spell.SpellNameEnum.BLIZZARD.name()));
+		Spell spellZ = new Spell();
+		spellZ.setBasicDamage(250);
+		spellZ.setUpByLevelPct(15);
+		spellZ.setIterationNumber(3);
+		spellZ.setCharacter(character);
+		spellZ.setControlType(this.cacheControlService.getValue(Spell.ControlTypeEnum.SLOWDOWN.name()));
+		spellZ.getKeys().add(keyZ);
+		spellZ.setName(this.cacheSpellNameService.getValue(Spell.SpellNameEnum.BLIZZARD.name()));
+		spellZ.setEffectArea(Spell.EffectAreaEnum.CIRCLE.name()); //FIXME must be in the cache
 		
-		character.getSpells().add(spellB);
+		keyZ.setSpell(spellZ);
+		
+		Range rangeSpellZ = new Range();
+		rangeSpellZ.setCreateDate(new Date());
+		rangeSpellZ.setShootingRange(5d);
+		rangeSpellZ.setSpell(spellZ);
+		
+		spellZ.getRanges().add(rangeSpellZ);
+		
+		character.getSpells().add(spellZ);
 		
 		this.characterRepository.save(character);
 	}

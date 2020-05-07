@@ -9,6 +9,7 @@
 		<class>com.me.work.jpa.bo.Life</class>
 		<class>com.me.work.jpa.bo.Spell</class>
 		<class>com.me.work.jpa.bo.Key</class>
+		<class>com.me.work.jpa.bo.Range</class>
 		
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>

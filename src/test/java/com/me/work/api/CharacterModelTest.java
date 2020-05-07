@@ -3,6 +3,7 @@ package com.me.work.api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import com.me.work.api.jpa.repository.CharacterRepository;
 import com.me.work.api.jpa.repository.SpellRepository;
 import com.me.work.character.v1.Key;
 import com.me.work.character.v1.Life;
+import com.me.work.character.v1.Range;
 import com.me.work.character.v1.Role;
 import com.me.work.character.v1.Spell;
 
@@ -73,8 +75,14 @@ public class CharacterModelTest {
 		spell.setIterationNumber(1);
 		spell.setName(com.me.work.api.jpa.bo.Spell.SpellNameEnum.SKELETAL_STRIKE.name());
 		spell.setUpByLevelPct(8);
-		spell.setKey(keyA);
+		spell.getKeys().add(keyA);
+		spell.setEffectArea(com.me.work.api.jpa.bo.Spell.EffectAreaEnum.SEMI_CIRCLE.name());
 		
+		Range rangeSpellA = new Range();
+		rangeSpellA.setCreateDate(new Date());
+		rangeSpellA.setShootingRange(3.5d);
+
+		spell.getRanges().add(rangeSpellA);
 		CHARACTER.getSpells().add(spell);
 		
 		//Life
@@ -82,14 +90,14 @@ public class CharacterModelTest {
 		life.setMinimumLife(1800);
 		life.setUpByLevelInPct(4);
 		
-		CHARACTER.setLife(life);
+		CHARACTER.getLifes().add(life);
 		
 		//Role
 		Role role = new Role();
 		role.setCreationDate(OffsetDateTime.now());
 		role.setName(this.cacheRoleService.getValue(com.me.work.api.jpa.bo.Role.RoleNameEnum.OFFENSIVE_WARRIOR.name()));
 		
-		CHARACTER.setRole(role);
+		CHARACTER.getRoles().add(role);
 	}
 	
 	@Test

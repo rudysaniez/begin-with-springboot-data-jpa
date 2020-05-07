@@ -1,6 +1,7 @@
 package com.me.work.api.jpa.bo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,32 +14,36 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
 @Data
-@Table(name="LIFE")
+@Table(name="RANGE")
 @Entity
-public class Life implements Serializable {
+public class Range implements Serializable {
 
 	@Id
-	@Column(name="LIFE_ID")
-	@SequenceGenerator(name="LIFE_SEQ_GEN", sequenceName="LIFE_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="LIFE_SEQ_GEN", strategy=GenerationType.SEQUENCE)
+	@Column(name="RANGE_ID")
+	@SequenceGenerator(name="RANGE_SEQ_GEN", sequenceName="RANGE_SEQ", initialValue=1, allocationSize=1)
+	@GeneratedValue(generator="RANGE_SEQ", strategy=GenerationType.SEQUENCE)
 	private Long id;
 	
-	@Column(name="MINIMUM_LIFE")
-	private Integer minimumLife;
+	@lombok.EqualsAndHashCode.Exclude
+	@Column(name="SHOOTING_RANGE")
+	private Double shootingRange;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@Column(name="UP_BY_LEVEL_IN_PCT")
-	private Integer upByLevelInPct;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="CREATION_DATE")
+	private Date createDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_CHARACTER_ID")
-	private Character character;
+	@JoinColumn(name="FK_SPELL_ID")
+	private Spell spell;
 	
 	private static final long serialVersionUID = 1L;
 }

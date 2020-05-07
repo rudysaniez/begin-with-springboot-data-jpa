@@ -24,16 +24,16 @@ public class Character {
 	private OffsetDateTime creationDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@JsonProperty(value="role", required=true)
-	private Role role;
+	@JsonProperty(value="roles", required=true)
+	private List<Role> roles = new ArrayList<>();
 
 	@lombok.EqualsAndHashCode.Exclude
-	@JsonProperty(value="life", required=true)
-	private Life life;
+	@JsonProperty(value="lifes", required=true)
+	private List<Life> lifes = new ArrayList<>();
 
 	@lombok.EqualsAndHashCode.Exclude @Valid
 	@JsonProperty(value="spells", required=true)
-	private List<Spell> spells;
+	private List<Spell> spells = new ArrayList<>();
 	
 	/**
 	 * @return list of {@link Spell}
