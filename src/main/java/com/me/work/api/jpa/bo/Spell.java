@@ -1,6 +1,8 @@
 package com.me.work.api.jpa.bo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,44 +15,56 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Validated
+@NoArgsConstructor
 @Data
-@Table(name="SPELL")
 @Entity
-public class Spell {
+@Table(name="SPELL", schema="characterdb", catalog="characterdb")
+public class Spell implements Serializable {
 
 	@Id
 	@Column(name="SPELL_ID")
-	@SequenceGenerator(name="SPELL_SEQ_GEN", sequenceName="SPELL_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="SPELL_SEQ_GEN", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="NAME")
-	private String name;
+	@NotEmpty private String name;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="TYPE")
-	private String controlType;
+	@NotEmpty private String controlType;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="BASIC_DAMAGE")
-	private int basicDamage;
+	@NotNull private Integer basicDamage;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="UP_BY_LEVEL_PCT")
-	private int upByLevelPct;
+	@NotNull private Integer upByLevelPct;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="ITERATION_NUMBER")
-	private int iterationNumber = 1;
+	@NotNull private Integer iterationNumber = 1;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="EFFECT_AREA")
-	private String effectArea;
+	@NotEmpty private String effectArea;
+	
+	@lombok.EqualsAndHashCode.Exclude
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="CREATION_DATE")
+	@NotNull private Date creationDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude
@@ -65,6 +79,8 @@ public class Spell {
 	@lombok.EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Range> ranges;
+	
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @return list of {@link Key}

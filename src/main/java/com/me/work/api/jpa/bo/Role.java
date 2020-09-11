@@ -12,31 +12,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Validated
+@NoArgsConstructor
 @Data
 @Entity
-@Table(name="ROLE")
+@Table(name="ROLE", schema="characterdb", catalog="characterdb")
 public class Role implements Serializable {
 
 	@Id
 	@Column(name="ROLE_ID")
-	@SequenceGenerator(name="ROLE_SEQ_GEN", sequenceName="ROLE_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="ROLE_SEQ_GEN", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="NAME")
-	private String name;
+	@NotEmpty private String name;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CREATION_DATE")
-	private Date creationDate;
+	@NotNull private Date creationDate;
 	
 	@lombok.ToString.Exclude
 	@lombok.EqualsAndHashCode.Exclude

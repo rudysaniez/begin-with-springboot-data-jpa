@@ -1,7 +1,7 @@
 package com.me.work.api.jpa.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -13,9 +13,8 @@ public interface CharacterRepository extends JpaRepository<com.me.work.api.jpa.b
 
 	/**
 	 * @param name
-	 * @param page
-	 * @return page of {@link Character}
+	 * @return optional of {@link Character}
 	 */
 	@RestResource(exported=false)
-	public Page<com.me.work.api.jpa.bo.Character> findByName(String name, Pageable page);
+	public Optional<com.me.work.api.jpa.bo.Character> findByName(String name);
 }

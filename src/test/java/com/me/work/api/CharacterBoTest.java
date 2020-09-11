@@ -2,6 +2,8 @@ package com.me.work.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,8 @@ public class CharacterBoTest {
 	public void test01() {
 		
 		//Characters
-		Page<Character> characters = this.characterRepository.findByName(Character.CharacterNameEnum.JAINA.name(), PageRequest.of(0, 5));
+		Optional<Character> characters = this.characterRepository.findByName(Character.CharacterNameEnum.JAINA.name());
 		assertThat(characters).isNotEmpty();
-		
-		characters.getContent().forEach(c -> System.out.println(" > Character is " + c.toString()));
 		
 		//Spells
 		Page<Spell> spells = this.spellRepository.findByName(Spell.SpellNameEnum.FLASH_OF_FROST.name(), PageRequest.of(0, 5));
@@ -42,5 +42,4 @@ public class CharacterBoTest {
 		
 		spells.getContent().forEach(c -> System.out.println(" > Spell is " + c.toString()));
 	}
-	
 }

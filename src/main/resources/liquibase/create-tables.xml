@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+      
+	<changeSet id="begin" author="michaelJordan">
+	
+		<!-- 
+			CHARACTER TABLE.
+		 -->
+		<createTable tableName="CHARACTER">
+			<column name="CHARACTER_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_CHARACTER" nullable="false"/>
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>				
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>	
+
+		<!--
+			LIFE TABLE.
+		 -->
+		<createTable tableName="LIFE">
+			<column name="LIFE_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_LIFE" nullable="false" />
+			</column>
+			
+			<column name="MINIMUM_LIFE" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="UP_BY_LEVEL_IN_PCT" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="FK_CHARACTER_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<!-- 
+			SPELL TABLE.
+		 -->
+		<createTable tableName="SPELL">
+			<column name="SPELL_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_SPELL" nullable="false"/>
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="TYPE" type="VARCHAR(20)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="BASIC_DAMAGE" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="UP_BY_LEVEL_PCT" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="ITERATION_NUMBER" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="EFFECT_AREA" type="VARCHAR(20)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="FK_CHARACTER_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<!-- 
+			ROLE TABLE.
+		 -->
+		<createTable tableName="ROLE">
+			<column name="ROLE_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_ROLE" nullable="false"/>
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="FK_CHARACTER_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<!-- 
+			RANGE TABLE.
+		 -->
+		<createTable tableName="RANGE">
+			<column name="RANGE_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_RANGE" nullable="false"/>
+			</column>
+			<column name="SHOOTING_RANGE" type="DOUBLE">
+				<constraints nullable="false"/>
+			</column>
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+			<column name="FK_SPELL_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<!-- 
+			KEY TABLE.
+		 -->
+		<createTable tableName="KEY">
+			<column name="KEY_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_KEY" nullable="false" />
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>			
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="FK_SPELL_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+	</changeSet>
+	
+	<changeSet id="index_creation" author="michaelJordan">
+	
+		<createIndex tableName="CHARACTER" indexName="CHAR_NAME_IDX" unique="true">
+			<column name="NAME"/>
+		</createIndex>
+		
+		<createIndex tableName="SPELL" indexName="SPELL_NAME_IDX" unique="true">
+			<column name="NAME"/>
+		</createIndex>
+		
+		<createIndex tableName="ROLE" indexName="ROLE_NAME_IDX" unique="true">
+			<column name="NAME"/>
+		</createIndex>
+		
+		<createIndex tableName="KEY" indexName="KEY_NAME_IDX" unique="true">
+			<column name="NAME"/>
+		</createIndex>
+		
+	</changeSet>
+         
+</databaseChangeLog>

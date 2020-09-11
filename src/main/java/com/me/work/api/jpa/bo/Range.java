@@ -12,32 +12,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Validated
+@NoArgsConstructor
 @Data
-@Table(name="RANGE")
 @Entity
+@Table(name="RANGE", schema="characterdb", catalog="characterdb")
 public class Range implements Serializable {
 
 	@Id
 	@Column(name="RANGE_ID")
-	@SequenceGenerator(name="RANGE_SEQ_GEN", sequenceName="RANGE_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="RANGE_SEQ", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="SHOOTING_RANGE")
-	private Double shootingRange;
+	@NotNull private Double shootingRange;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="CREATION_DATE")
-	private Date createDate;
+	@NotNull private Date createDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude

@@ -1,0 +1,411 @@
+---
+openapi: 3.0.1
+info:
+  title: Character-api
+  version: v0
+servers:
+- url: http://localhost:8081/api/v1
+  description: Generated server url
+paths:
+  /characters:
+    summary: Research and save Character.
+    get:
+      tags:
+      - character-controller
+      parameters:
+      - name: name
+        description: Character name.
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: pageNumber
+        description: Page number.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: pageSize
+        description: Size of page.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedCharacter'
+          description: Characters are found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Characters are not found.
+      operationId: findCharacters
+      summary: Research Characters.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+        required: true
+      tags:
+      - character-controller
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+          description: Character is updated.
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+          description: Character is created.
+      operationId: saveCharacter
+      summary: Save Character.
+  /characters/{id}:
+    summary: Gets a character by identifier.
+    get:
+      tags:
+      - character-controller
+      parameters:
+      - name: id
+        description: Identifier.
+        schema:
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+          description: Character is found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Character is not found.
+      operationId: getCharacter
+      summary: Research Character by identifier.
+    parameters:
+    - name: id
+      description: Identifier.
+      schema:
+        type: string
+      in: path
+      required: true
+  /spells:
+    summary: Research and save Spell.
+    get:
+      tags:
+      - spell-controller
+      parameters:
+      - name: name
+        description: Spell name.
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: pageNumber
+        description: Page number.
+        schema:
+          type: integer
+        in: query
+      - name: pageSize
+        description: Size of page.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSpell'
+          description: Spells are found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Spells are not found.
+      operationId: findSpells
+      summary: Research Spells.
+  /spells/{id}:
+    get:
+      tags:
+      - spell-controller
+      parameters:
+      - name: id
+        description: Identifier.
+        schema:
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spell'
+          description: Spell is found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Spell is not found.
+      operationId: getSpell
+      summary: Research Spell by identifier.
+  /roles:
+    summary: Research and save Role.
+    get:
+      tags:
+      - role-controller
+      parameters:
+      - name: name
+        description: Role name.
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: pageNumber
+        description: Page number.
+        schema:
+          type: integer
+        in: query
+      - name: pageSize
+        description: Size of page.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedRole'
+          description: Roles are found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Roles are not found.
+      operationId: findRoles
+      summary: Research Roles.
+  /roles/{id}:
+    summary: Gets a Role by identifier.
+    get:
+      tags:
+      - role-controller
+      parameters:
+      - name: id
+        description: Identifier.
+        schema:
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: Role is found.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorInfo'
+          description: Role is not found.
+      operationId: getRole
+      summary: Research Role by identifier
+    parameters:
+    - name: id
+      description: Identifier.
+      schema:
+        type: string
+      in: path
+      required: true
+components:
+  schemas:
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    Character:
+      required:
+      - life
+      - name
+      - role
+      - spells
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        life:
+          $ref: '#/components/schemas/Life'
+        spells:
+          type: array
+          items:
+            $ref: '#/components/schemas/Spell'
+    Key:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    Life:
+      required:
+      - minimumLife
+      - upByLevel
+      type: object
+      properties:
+        minimumLife:
+          format: int32
+          type: integer
+        upByLevel:
+          format: int32
+          type: integer
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          format: int64
+          type: integer
+        totalElements:
+          format: int64
+          type: integer
+        totalPages:
+          format: int64
+          type: integer
+        number:
+          format: int64
+          type: integer
+    Range:
+      type: object
+      properties:
+        shootingRange:
+          format: double
+          type: number
+        createDate:
+          format: date-time
+          type: string
+    Role:
+      required:
+      - creationDate
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        creationDate:
+          format: date-time
+          type: string
+    Spell:
+      required:
+      - basicDamage
+      - controlType
+      - effectArea
+      - iterationNumber
+      - keys
+      - name
+      - ranges
+      - upByLevel
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        controlType:
+          type: string
+        basicDamage:
+          format: int32
+          type: integer
+        upByLevel:
+          format: int32
+          type: integer
+        iterationNumber:
+          format: int32
+          type: integer
+        effectArea:
+          type: string
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Key'
+        ranges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Range'
+    HttpErrorInfo:
+      description: ""
+      required:
+      - httpStatus
+      - message
+      - timestamp
+      type: object
+      properties:
+        httpStatus:
+          description: 'Http status : NOT_FOUND.'
+          type: string
+        message:
+          description: The reason of error.
+          type: string
+        timestamp:
+          format: date-time
+          description: Temporal information.
+          type: string
+    PagedCharacter:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Character'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    PagedRole:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    PagedSpell:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Spell'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
