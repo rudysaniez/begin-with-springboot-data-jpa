@@ -4,9 +4,26 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
-      
-	<changeSet id="begin" author="michaelJordan">
-	
+     
+	<changeSet id="tables_creation" author="michaelJordan">
+		
+		<!-- 
+			ROLE TABLE.
+		 -->
+		<createTable tableName="ROLE">
+			<column name="ROLE_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_ROLE" nullable="false"/>
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
 		<!-- 
 			CHARACTER TABLE.
 		 -->
@@ -22,7 +39,28 @@
 			<column name="CREATION_DATE" type="DATETIME">
 				<constraints nullable="false"/>
 			</column>
+			
+			<column name="FK_ROLE_ID" type="INTEGER">
+				<constraints nullable="false"/>
+			</column>
 		</createTable>	
+
+		<!-- 
+			KEY TABLE.
+		 -->
+		<createTable tableName="KEY">
+			<column name="KEY_ID" type="INTEGER" autoIncrement="true">
+				<constraints primaryKey="true" primaryKeyName="PK_KEY" nullable="false" />
+			</column>
+			
+			<column name="NAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>			
+			</column>
+			
+			<column name="CREATION_DATE" type="DATETIME">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
 
 		<!--
 			LIFE TABLE.
@@ -36,7 +74,7 @@
 				<constraints nullable="false"/>
 			</column>
 			
-			<column name="UP_BY_LEVEL_IN_PCT" type="INTEGER">
+			<column name="UP_BY_LEVEL" type="INTEGER">
 				<constraints nullable="false"/>
 			</column>
 			
@@ -69,7 +107,7 @@
 				<constraints nullable="false"/>
 			</column>
 			
-			<column name="UP_BY_LEVEL_PCT" type="INTEGER">
+			<column name="UP_BY_LEVEL" type="INTEGER">
 				<constraints nullable="false"/>
 			</column>
 			
@@ -88,25 +126,8 @@
 			<column name="FK_CHARACTER_ID" type="INTEGER">
 				<constraints nullable="false"/>
 			</column>
-		</createTable>
-		
-		<!-- 
-			ROLE TABLE.
-		 -->
-		<createTable tableName="ROLE">
-			<column name="ROLE_ID" type="INTEGER" autoIncrement="true">
-				<constraints primaryKey="true" primaryKeyName="PK_ROLE" nullable="false"/>
-			</column>
 			
-			<column name="NAME" type="VARCHAR(50)">
-				<constraints nullable="false"/>
-			</column>
-			
-			<column name="CREATION_DATE" type="DATETIME">
-				<constraints nullable="false"/>
-			</column>
-			
-			<column name="FK_CHARACTER_ID" type="INTEGER">
+			<column name="FK_KEY_ID" type="INTEGER">
 				<constraints nullable="false"/>
 			</column>
 		</createTable>
@@ -124,27 +145,6 @@
 			<column name="CREATION_DATE" type="DATETIME">
 				<constraints nullable="false"/>
 			</column>
-			<column name="FK_SPELL_ID" type="INTEGER">
-				<constraints nullable="false"/>
-			</column>
-		</createTable>
-		
-		<!-- 
-			KEY TABLE.
-		 -->
-		<createTable tableName="KEY">
-			<column name="KEY_ID" type="INTEGER" autoIncrement="true">
-				<constraints primaryKey="true" primaryKeyName="PK_KEY" nullable="false" />
-			</column>
-			
-			<column name="NAME" type="VARCHAR(50)">
-				<constraints nullable="false"/>			
-			</column>
-			
-			<column name="CREATION_DATE" type="DATETIME">
-				<constraints nullable="false"/>
-			</column>
-			
 			<column name="FK_SPELL_ID" type="INTEGER">
 				<constraints nullable="false"/>
 			</column>

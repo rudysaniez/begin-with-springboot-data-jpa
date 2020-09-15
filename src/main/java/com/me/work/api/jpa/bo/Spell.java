@@ -1,9 +1,7 @@
 package com.me.work.api.jpa.bo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,8 +48,8 @@ public class Spell implements Serializable {
 	@NotNull private Integer basicDamage;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@Column(name="UP_BY_LEVEL_PCT")
-	@NotNull private Integer upByLevelPct;
+	@Column(name="UP_BY_LEVEL")
+	@NotNull private Integer upByLevel;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="ITERATION_NUMBER")
@@ -73,36 +71,17 @@ public class Spell implements Serializable {
 	private Character character;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Key> keys;
+	@lombok.ToString.Exclude
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_KEY_ID")
+	private Key key;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Range> ranges;
+	@lombok.ToString.Exclude
+	@OneToOne(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private Range range;
 	
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * @return list of {@link Key}
-	 */
-	public List<Key> getKeys() {
-		
-		if(this.keys == null)
-			this.keys = new ArrayList<>();
-		
-		return this.keys;
-	}
-	
-	/**
-	 * @return list of {@link Range}
-	 */ 
-	public List<Range> getRanges() {
-		
-		if(this.ranges == null)
-			this.ranges = new ArrayList<>();
-		
-		return this.ranges;
-	}
 	
 	public static enum ControlTypeEnum {
 		

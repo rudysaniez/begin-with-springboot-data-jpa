@@ -333,9 +333,9 @@ components:
       - controlType
       - effectArea
       - iterationNumber
-      - keys
+      - key
       - name
-      - ranges
+      - range
       - upByLevel
       type: object
       properties:
@@ -356,14 +356,10 @@ components:
           type: integer
         effectArea:
           type: string
-        keys:
-          type: array
-          items:
-            $ref: '#/components/schemas/Key'
-        ranges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Range'
+        key:
+          $ref: '#/components/schemas/Key'
+        range:
+          $ref: '#/components/schemas/Range'
     HttpErrorInfo:
       description: ""
       required:

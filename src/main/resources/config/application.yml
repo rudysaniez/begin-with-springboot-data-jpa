@@ -7,13 +7,25 @@ logging:
     org.springframework.cache: DEBUG
     com.github.benmanes.caffeine: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,env,metrics
+      base-path: /management
+
+server:
+  port: 9080
+  servlet:
+    context-path: /api/v1
+
 spring:
   cache:
     caffeine:
       spec: maximumSize=500,expireAfterAccess=600s
       
   datasource:
-    url: jdbc:mysql://localhost:3306/characterdb
+    url: jdbc:mysql://localhost:3306/characterdb?createDatabaseIfNotExist=true
     username: root
     password: welcome
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -42,11 +54,30 @@ spring:
     change-log: classpath:liquibase/create-tables.xml
     default-schema: characterdb
 
-  data:
-    rest:
-      base-path: /api/v1
-      
 api:
   pagination:
     default-page-number: 0
     default-page-size: 10
+    
+---
+spring.profiles: docker
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.cache: DEBUG
+
+spring:
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+      
+  datasource:
+    url: jdbc:mysql://character-api-database-mysql:3306/characterdb?createDatabaseIfNotExist=true
+    username: root
+    password: welcome
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+server:
+  port: 9080

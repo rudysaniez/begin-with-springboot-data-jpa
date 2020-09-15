@@ -38,8 +38,8 @@ public class Life implements Serializable {
 	@NotNull private Integer minimumLife;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@Column(name="UP_BY_LEVEL_IN_PCT")
-	@NotNull private Integer upByLevelInPct;
+	@Column(name="UP_BY_LEVEL")
+	@NotNull private Integer upByLevel;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Temporal(TemporalType.TIMESTAMP)
