@@ -1,7 +1,7 @@
 package com.me.work.api.jpa.bo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,45 +12,57 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Validated
+@NoArgsConstructor
 @Data
-@Table(name="SPELL")
 @Entity
-public class Spell {
+@Table(name="SPELL", catalog="characterdb")
+public class Spell implements Serializable {
 
 	@Id
 	@Column(name="SPELL_ID")
-	@SequenceGenerator(name="SPELL_SEQ_GEN", sequenceName="SPELL_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="SPELL_SEQ_GEN", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="NAME")
-	private String name;
+	@NotEmpty private String name;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="TYPE")
-	private String controlType;
+	@NotEmpty private String controlType;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="BASIC_DAMAGE")
-	private int basicDamage;
+	@NotNull private Integer basicDamage;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@Column(name="UP_BY_LEVEL_PCT")
-	private int upByLevelPct;
+	@Column(name="UP_BY_LEVEL")
+	@NotNull private Integer upByLevel;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="ITERATION_NUMBER")
-	private int iterationNumber = 1;
+	@NotNull private Integer iterationNumber = 1;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="EFFECT_AREA")
-	private String effectArea;
+	@NotEmpty private String effectArea;
+	
+	@lombok.EqualsAndHashCode.Exclude
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="CREATION_DATE")
+	@NotNull private Date creationDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@lombok.ToString.Exclude
@@ -59,34 +71,17 @@ public class Spell {
 	private Character character;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Key> keys;
+	@lombok.ToString.Exclude
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_KEY_ID")
+	private Key key;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Range> ranges;
+	@lombok.ToString.Exclude
+	@OneToOne(mappedBy="spell", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private Range range;
 	
-	/**
-	 * @return list of {@link Key}
-	 */
-	public List<Key> getKeys() {
-		
-		if(this.keys == null)
-			this.keys = new ArrayList<>();
-		
-		return this.keys;
-	}
-	
-	/**
-	 * @return list of {@link Range}
-	 */ 
-	public List<Range> getRanges() {
-		
-		if(this.ranges == null)
-			this.ranges = new ArrayList<>();
-		
-		return this.ranges;
-	}
+	private static final long serialVersionUID = 1L;
 	
 	public static enum ControlTypeEnum {
 		

@@ -12,68 +12,55 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Validated
+@NoArgsConstructor
 @Data
-@Table(name="CHARACTER")
 @Entity
+@Table(name="CHARACTER", catalog="characterdb")
 public class Character implements Serializable {
 
 	@Id
 	@Column(name="CHARACTER_ID")
-	@SequenceGenerator(name="CHARACTER_SEQ_GEN", sequenceName="CHARACTER_SEQ", initialValue=1, allocationSize=1)
-	@GeneratedValue(generator="CHARACTER_SEQ_GEN", strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="NAME")
-	private String name;
+	@NotEmpty private String name;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@Column(name="CREATION_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date creationDate;
+	@NotNull private Date creationDate;
 	
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="character",fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Role> roles;
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_ROLE_ID")
+	private Role role;
 
 	@lombok.EqualsAndHashCode.Exclude
-	@OneToMany(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Life> lifes;
+	@OneToOne(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private Life life;
 	
 	@lombok.EqualsAndHashCode.Exclude
 	@OneToMany(mappedBy="character", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Spell> spells;
 	
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * @return list of {@link Role}
-	 */
-	public List<Role> getRoles() {
-		
-		if(this.roles == null)
-			this.roles = new ArrayList<>();
-		
-		return this.roles;
-	}
-	
-	/**
-	 * @return list of {@link Life}
-	 */
-	public List<Life> getLifes() {
-		
-		if(this.lifes == null)
-			this.lifes = new ArrayList<>();
-		
-		return this.lifes;
-	}
 	
 	/**
 	 * @return list of {@link Spell}

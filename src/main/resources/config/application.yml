@@ -1,0 +1,127 @@
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.cache: DEBUG
+    org.springframework.cache: DEBUG
+    com.github.benmanes.caffeine: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,env,metrics
+      base-path: /management
+
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+      
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      
+  jpa:    
+    hibernate:
+      ddl-auto: none
+      
+    show-sql: false
+    
+    properties:
+      hibernate.cache.use_query_cache: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.region.factory_class: org.hibernate.cache.EhCacheRegionFactory
+      net.sf.ehcache.configurationResourceName: META-INF/ehcache.xml
+      hibernate.generate_statistics: true
+      hibernate.jdbc.wrap_result_sets: true
+      hibernate.jdbc.batch_size: 20
+      hibernate.default_batch_fetch_size: 4
+
+api:
+  pagination:
+    default-page-number: 0
+    default-page-size: 10
+
+---
+spring.profiles: demo
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.cache: DEBUG
+
+spring:
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+  
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    
+  datasource:
+    url: jdbc:mysql://localhost:3306/characterdb
+    username: michael
+    password: jordan
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  liquibase:
+    change-log: classpath:liquibase/create-tables.xml
+    default-schema: characterdb
+    url: jdbc:mysql://localhost:3306/characterdb
+    user: michael
+    password: jordan
+    enabled: true
+    
+server:
+  port: 9080
+    
+---
+spring.profiles: docker
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.cache: DEBUG
+
+spring:
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+  
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        
+  datasource:
+    url: jdbc:mysql://character-api-database-mysql:3306/characterdb
+    username: michael
+    password: jordan
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  liquibase:
+    change-log: classpath:liquibase/create-tables.xml
+    default-schema: characterdb
+    url: jdbc:mysql://character-api-database-mysql:3306/characterdb
+    user: michael
+    password: jordan
+    enabled: true
+    
+server:
+  port: 9080
