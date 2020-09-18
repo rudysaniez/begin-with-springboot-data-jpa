@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="RANGE", schema="characterdb", catalog="characterdb")
+@Table(name="RANGE", catalog="characterdb")
 public class Range implements Serializable {
 
 	@Id

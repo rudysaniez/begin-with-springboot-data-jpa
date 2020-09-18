@@ -9,15 +9,18 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'
+          cpus: '0.70'
           memory: 250M
         reservations:
-          cpus: '0.25'
+          cpus: '0.50'
           memory: 150M
     ports:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=welcome
+      - MYSQL_USER=michael
+      - MYSQL_PASSWORD=jordan
+      - MYSQL_DATABASE=characterdb
     
   character-api:
     build: .
@@ -33,6 +36,7 @@ services:
       - 9080:9080
     depends_on: 
       - character-api-database-mysql
+    command: dockerize -wait tcp://character-api-database-mysql:3306
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       

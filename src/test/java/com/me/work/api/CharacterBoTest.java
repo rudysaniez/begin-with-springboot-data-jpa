@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,7 @@ import com.me.work.api.jpa.repository.SpellRepository;
 
 @SpringBootTest
 @Transactional
+@AutoConfigureTestDatabase(connection=EmbeddedDatabaseConnection.HSQL)
 @RunWith(SpringRunner.class)
 public class CharacterBoTest {
 

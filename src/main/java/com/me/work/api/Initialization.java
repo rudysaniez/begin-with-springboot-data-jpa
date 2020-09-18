@@ -109,6 +109,8 @@ public class Initialization implements ApplicationRunner {
 			character.getSpells().add(spellZ);
 			
 			characterRepository.save(character);
+			
+			if(log.isInfoEnabled()) log.info(" > JAINA is created.");
 		}
 		else {
 			if(log.isInfoEnabled()) log.info(" > JAINA already exists.");

@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="ROLE", schema="characterdb", catalog="characterdb")
+@Table(name="ROLE", catalog="characterdb")
 public class Role implements Serializable {
 
 	@Id

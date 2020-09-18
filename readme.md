@@ -2,33 +2,93 @@
 
 ## Maven
 
-	mvn clean package -Dmaven.test.skip
+	mvn clean package
 
-## Run docker-compose
+## Run mysql in Docker
 
-	docker-compose up --detach --build
+	./run-mysql
+	
+This file launch that :
+
+	docker run --rm -d --name mysql23 -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=welcome" -e "MYSQL_USER=michael" -e "MYSQL_PASSWORD=jordan" -e "MYSQL_DATABASE=characterdb" mysql:latest
 	
 You can launch :
 	
-	docker-compose logs -f
+	docker logs -f mysql23
 	
-If you w	ant see the logs of api container :
+## Starting up Characters API
 
-	docker-compose logs -f character-api
+	cd target
+	java -jar -Dspring.profiles.active=demo begin-with-springboot-jpa-0.0.1-SNAPSHOT.jar &
 	
-## Access to Character API
+The "dev" profile is enabled. You can check the configuration in application.yml file.
+	
+## Access to Character API : JAINA, where are you ?
 
-	curl -X GET "http://localhost:9080/api/v1/characters?pageNumber=0&pageSize=5" -s | jq
+	curl -X GET "http://localhost:9080/api/v1/characters?name=JAINA" -s | jq
 	
 Response :
 
 	{
-		"httpStatus": "NOT_FOUND",
-		"message": "The collection of characters is empty.",
-		"timestamp": "2020-09-08T14:58:37.886751Z"
+	"content": [
+	    {
+	      "id": "1",
+	      "name": "JAINA",
+	      "creationDate": "2020-09-18T07:19:29Z",
+	      "role": {
+	        "id": "1",
+	        "name": "REMOTE_ASSASSIN",
+	        "creationDate": "2020-09-18T07:19:29Z"
+	      },
+	      "life": {
+	        "minimumLife": 1400,
+	        "upByLevel": 4
+	      },
+	      "spells": [
+	        {
+	          "id": "1",
+	          "name": "FLASH_OF_FROST",
+	          "controlType": "SLOWDOWN",
+	          "basicDamage": 80,
+	          "upByLevel": 5,
+	          "iterationNumber": 1,
+	          "effectArea": "LINE",
+	          "key": {
+	            "name": "A"
+	          },
+	          "range": {
+	            "shootingRange": 7,
+	            "createDate": "2020-09-18T07:19:29Z"
+	          }
+	        },
+	        {
+	          "id": "2",
+	          "name": "BLIZZARD",
+	          "controlType": "SLOWDOWN",
+	          "basicDamage": 250,
+	          "upByLevel": 15,
+	          "iterationNumber": 3,
+	          "effectArea": "CIRCLE",
+	          "key": {
+	            "name": "Z"
+	          },
+	          "range": {
+	            "shootingRange": 5,
+	            "createDate": "2020-09-18T07:19:29Z"
+	          }
+	        }
+	      ]
+	    }
+	  ],
+	  "page": {
+	    "size": 10,
+	    "totalElements": 1,
+	    "totalPages": 1,
+	    "number": 0
+	  }
 	}
 	
-### Add a new Character
+### Add a new Character : CASSIA
 	
 This character will be created :
 
@@ -108,9 +168,15 @@ Launch that :
 ## Find a character by name
 
 	curl -X GET "http://localhost:9080/api/v1/characters?name=CASSIA" -s | jq
+	
+## Stopping up the API
 
-## Stopping up the api
+	ps -ef | grep -i begin-with-springboot-jpa
+	
+	kill {pid}
+	
+## Stopping mysql database
 
-	docker-compose stop
-		
+	docker stop mysql23
+
 	

@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 @Data
 @Entity
-@Table(name="KEY", schema="characterdb", catalog="characterdb")
+@Table(name="KEY", catalog="characterdb")
 public class Key implements Serializable {
 
 	@Id

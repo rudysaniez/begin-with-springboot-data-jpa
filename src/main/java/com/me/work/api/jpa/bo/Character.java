@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="CHARACTER", schema="characterdb", catalog="characterdb")
+@Table(name="CHARACTER", catalog="characterdb")
 public class Character implements Serializable {
 
 	@Id
